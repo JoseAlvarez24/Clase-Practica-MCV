@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="ModeloTiendaMVC" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+  <EntityContainer Name="ModeloTiendaMVCContainer" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Productos" EntityType="ModeloTiendaMVC.Producto" />
+    <EntitySet Name="Proveedores" EntityType="ModeloTiendaMVC.Proveedor" />
+    <EntitySet Name="CategoriaSet" EntityType="ModeloTiendaMVC.Categoria" />
+    <AssociationSet Name="CategoriaProducto" Association="ModeloTiendaMVC.CategoriaProducto">
+      <End Role="Categoria" EntitySet="CategoriaSet" />
+      <End Role="Producto" EntitySet="Productos" />
+    </AssociationSet>
+    <AssociationSet Name="ProveedorProducto" Association="ModeloTiendaMVC.ProveedorProducto">
+      <End Role="Proveedor" EntitySet="Proveedores" />
+      <End Role="Producto" EntitySet="Productos" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Producto">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nombre" Type="String" Nullable="false" />
+    <Property Name="Descripcion" Type="String" Nullable="false" />
+    <Property Name="Precio" Type="Double" Nullable="false" />
+    <Property Name="Stock" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Categoria" Relationship="ModeloTiendaMVC.CategoriaProducto" FromRole="Producto" ToRole="Categoria" />
+    <Property Name="CategoriaId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Proveedor" Relationship="ModeloTiendaMVC.ProveedorProducto" FromRole="Producto" ToRole="Proveedor" />
+    <Property Name="ProveedorId" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Proveedor">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Descripcion" Type="String" Nullable="false" />
+    <Property Name="FechaRegistro" Type="String" Nullable="false" />
+    <NavigationProperty Name="Productos" Relationship="ModeloTiendaMVC.ProveedorProducto" FromRole="Proveedor" ToRole="Producto" />
+  </EntityType>
+  <EntityType Name="Categoria">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nombre" Type="String" Nullable="false" />
+    <Property Name="Telefono" Type="String" Nullable="false" />
+    <NavigationProperty Name="Productos" Relationship="ModeloTiendaMVC.CategoriaProducto" FromRole="Categoria" ToRole="Producto" />
+  </EntityType>
+  <Association Name="CategoriaProducto">
+    <End Type="ModeloTiendaMVC.Categoria" Role="Categoria" Multiplicity="1" />
+    <End Type="ModeloTiendaMVC.Producto" Role="Producto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categoria">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Producto">
+        <PropertyRef Name="CategoriaId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ProveedorProducto">
+    <End Type="ModeloTiendaMVC.Proveedor" Role="Proveedor" Multiplicity="1" />
+    <End Type="ModeloTiendaMVC.Producto" Role="Producto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Proveedor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Producto">
+        <PropertyRef Name="ProveedorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
